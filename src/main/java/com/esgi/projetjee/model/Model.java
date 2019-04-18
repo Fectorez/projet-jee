@@ -19,4 +19,8 @@ public abstract class Model {
     public void generateUuid() {
         this.uuid = UUID.randomUUID().toString();
     }
+
+    public String getUuid() {
+        return uuid;
+    }
 }

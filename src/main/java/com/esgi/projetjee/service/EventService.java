@@ -1,5 +1,6 @@
 package com.esgi.projetjee.service;
 
+import com.esgi.projetjee.config.EventConfig;
 import com.esgi.projetjee.dao.EventRepository;
 import com.esgi.projetjee.model.Event;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,10 +13,12 @@ import java.util.List;
 public class EventService {
 
     private final EventRepository eventRepository;
+    private final EventConfig eventConfig;
 
     @Autowired
-    public EventService(EventRepository eventRepository) {
+    public EventService(EventRepository eventRepository, EventConfig eventConfig) {
         this.eventRepository = eventRepository;
+        this.eventConfig = eventConfig;
     }
 
     @Transactional(readOnly = true)
@@ -25,6 +28,12 @@ public class EventService {
 
     @Transactional
     public boolean updateEvent(Event event) {
+        eventRepository.save(event);
+        return true;
+    }
+
+    @Transactional
+    public boolean storeEvent(Event event) {
         eventRepository.save(event);
         return true;
     }
