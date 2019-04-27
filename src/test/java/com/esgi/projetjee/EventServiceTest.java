@@ -55,7 +55,7 @@ public class EventServiceTest {
         captor = ArgumentCaptor.forClass(Event.class);
         Event event = new Event("eventTest", new Date(), "Paris");
 
-        eventService.storeEvent(event);
+        eventService.saveEvent(event);
         verify(eventRepository).save(captor.capture());
 
         Event actual = captor.getValue();

@@ -27,13 +27,7 @@ public class EventService {
     }
 
     @Transactional
-    public boolean updateEvent(Event event) {
-        eventRepository.save(event);
-        return true;
-    }
-
-    @Transactional
-    public boolean storeEvent(Event event) {
+    public boolean saveEvent(Event event) {
         eventRepository.save(event);
         return true;
     }
