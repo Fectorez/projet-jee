@@ -16,7 +16,7 @@ import java.util.Objects;
 //@NoArgsConstructor
 @ToString(callSuper = true)
 @Entity
-public class Interest {
+public class Interest extends Model{
 
     @Property
     private String name;
