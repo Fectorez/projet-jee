@@ -7,8 +7,6 @@ import org.springframework.scheduling.annotation.Async;
 
 import java.util.concurrent.CompletableFuture;
 
-public interface InterestRepository extends JpaRepository<Interest, String> {
+public interface InterestRepository extends JpaRepository<Interest, Integer> {
 
-    @Async
-    CompletableFuture<Event> findByUuid(String uuid);
 }

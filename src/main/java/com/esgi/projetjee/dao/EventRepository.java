@@ -8,8 +8,5 @@ import org.springframework.stereotype.Repository;
 import java.util.concurrent.CompletableFuture;
 
 @Repository
-public interface EventRepository extends JpaRepository<Event, String> {
-
-    @Async
-    CompletableFuture<Event> findByUuid(String uuid);
+public interface EventRepository extends JpaRepository<Event, Integer> {
 }

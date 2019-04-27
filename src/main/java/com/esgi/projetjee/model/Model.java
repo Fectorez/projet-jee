@@ -3,9 +3,7 @@ package com.esgi.projetjee.model;
 import lombok.Getter;
 import lombok.ToString;
 
-import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
-import javax.persistence.PrePersist;
+import javax.persistence.*;
 import java.util.UUID;
 
 @MappedSuperclass
@@ -13,14 +11,14 @@ import java.util.UUID;
 @ToString
 public abstract class Model {
     @Id
-    private String uuid;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
-    @PrePersist
-    public void generateUuid() {
-        this.uuid = UUID.randomUUID().toString();
+    public Integer getId() {
+        return id;
     }
 
-    public String getUuid() {
-        return uuid;
+    public void setId(Integer id) {
+        this.id = id;
     }
 }
