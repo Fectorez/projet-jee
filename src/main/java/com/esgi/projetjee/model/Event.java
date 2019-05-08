@@ -4,6 +4,7 @@ import jdk.nashorn.internal.objects.annotations.Property;
 import lombok.*;
 
 import javax.persistence.Entity;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
 

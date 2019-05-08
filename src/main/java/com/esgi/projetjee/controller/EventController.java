@@ -24,10 +24,20 @@ public class EventController {
         return eventService.getEvents();
     }
 
+    @GetMapping("/{id}")
+    public Event getEvent(@PathVariable Integer id){
+        return eventService.getEvent(id);
+    }
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Event createEvent(@RequestBody Event event) {
         eventService.saveEvent(event);
         return event;
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteEvent(@PathVariable Integer id) {
+        eventService.deleteEvent(id);
     }
 }

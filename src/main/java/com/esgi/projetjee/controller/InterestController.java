@@ -24,6 +24,11 @@ public class InterestController {
         return interestService.getInterests();
     }
 
+    @GetMapping("/{id}")
+    public Interest getInterest(@PathVariable Integer id){
+        return interestService.getInterest(id);
+    }
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Interest createInterest(@RequestBody Interest interest) {
