@@ -1,5 +1,6 @@
 package com.esgi.projetjee.model;
 
+import com.esgi.projetjee.utils.BCryptManagerUtil;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,6 +25,13 @@ public class User implements UserDetails {
     private String password;
 
 
+    public User() {
+    }
+
+    public User(@NotNull String username, @NotNull String password) {
+        this.username = username;
+        setPassword(password);
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -61,7 +69,7 @@ public class User implements UserDetails {
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        this.password = BCryptManagerUtil.passwordencoder().encode("{noop}"+password);
     }
 
     public void setUsername(String username) {
