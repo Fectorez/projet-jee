@@ -4,6 +4,7 @@ import jdk.nashorn.internal.objects.annotations.Property;
 import lombok.*;
 
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
@@ -26,6 +27,16 @@ public class Event extends Model {
 
     @Property
     private String location;
+
+    @ManyToOne
+    private User user;
+
+    public Event(String name, Date date, String location, User user) {
+        this.name = name;
+        this.date = date;
+        this.location = location;
+        this.user = user;
+    }
 
     public Event(String name, Date date, String location) {
         this.name = name;

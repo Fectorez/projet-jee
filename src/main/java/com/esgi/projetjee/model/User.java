@@ -24,6 +24,12 @@ public class User implements UserDetails {
     @NotNull
     private String password;
 
+    @ManyToMany
+    private Collection<Interest> interests;
+
+    @OneToMany(mappedBy = "user")
+    private Collection<Event> events;
+
 
     public User() {
     }

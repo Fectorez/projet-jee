@@ -7,6 +7,8 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.Entity;
+import javax.persistence.ManyToMany;
+import java.util.Collection;
 import java.util.Objects;
 
 @Getter
@@ -20,6 +22,14 @@ public class Interest extends Model{
 
     @Property
     private String name;
+
+    @ManyToMany(mappedBy = "interests")
+    private Collection<User> users;
+
+    public Interest(String name, Collection<User> users) {
+        this.name = name;
+        this.users = users;
+    }
 
     public Interest() {
     }
