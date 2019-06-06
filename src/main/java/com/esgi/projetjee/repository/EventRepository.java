@@ -1,11 +1,8 @@
-package com.esgi.projetjee.dao;
+package com.esgi.projetjee.repository;
 
-import com.esgi.projetjee.model.Event;
+import com.esgi.projetjee.domain.Event;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Repository;
-
-import java.util.concurrent.CompletableFuture;
 
 @Repository
 public interface EventRepository extends JpaRepository<Event, Integer> {

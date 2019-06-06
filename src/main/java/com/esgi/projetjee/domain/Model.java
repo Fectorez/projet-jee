@@ -1,10 +1,9 @@
-package com.esgi.projetjee.model;
+package com.esgi.projetjee.domain;
 
 import lombok.Getter;
 import lombok.ToString;
 
 import javax.persistence.*;
-import java.util.UUID;
 
 @MappedSuperclass
 @Getter

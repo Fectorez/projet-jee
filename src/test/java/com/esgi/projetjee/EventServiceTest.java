@@ -1,15 +1,14 @@
 package com.esgi.projetjee;
 
-import com.esgi.projetjee.config.EventConfig;
-import com.esgi.projetjee.dao.EventRepository;
-import com.esgi.projetjee.model.Event;
+import com.esgi.projetjee.repository.EventRepository;
+import com.esgi.projetjee.domain.Event;
+import com.esgi.projetjee.repository.InterestRepository;
 import com.esgi.projetjee.service.EventService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.*;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.util.Assert;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -37,7 +36,7 @@ public class EventServiceTest {
     private EventRepository eventRepository;
 
     @Mock
-    private EventConfig eventConfig;
+    private InterestRepository interestRepository;
 
     @Captor
     private ArgumentCaptor<Event> captor;
@@ -46,8 +45,8 @@ public class EventServiceTest {
     public void setUp() {
         MockitoAnnotations.initMocks(this);
         eventRepository = mock(EventRepository.class);
-        eventConfig = new EventConfig();
-        eventService = new EventService(eventRepository, eventConfig);
+        interestRepository = mock(InterestRepository.class);
+        eventService = new EventService(eventRepository, interestRepository);
     }
 
     @Test
@@ -55,7 +54,7 @@ public class EventServiceTest {
         captor = ArgumentCaptor.forClass(Event.class);
         Event event = new Event("eventTest", new Date(), "Paris");
 
-        eventService.saveEvent(event);
+        eventService.createOrUpdateEvent(event);
         verify(eventRepository).save(captor.capture());
 
         Event actual = captor.getValue();

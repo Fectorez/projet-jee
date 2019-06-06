@@ -1,5 +1,6 @@
-package com.esgi.projetjee.model;
+package com.esgi.projetjee.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jdk.nashorn.internal.objects.annotations.Property;
 import lombok.Builder;
 import lombok.Getter;
@@ -11,11 +12,6 @@ import javax.persistence.ManyToMany;
 import java.util.Collection;
 import java.util.Objects;
 
-@Getter
-@Setter
-@Builder
-//@AllArgsConstructor
-//@NoArgsConstructor
 @ToString(callSuper = true)
 @Entity
 public class Interest extends Model{
@@ -24,11 +20,17 @@ public class Interest extends Model{
     private String name;
 
     @ManyToMany(mappedBy = "interests")
+    @JsonIgnore
     private Collection<User> users;
 
-    public Interest(String name, Collection<User> users) {
+    @ManyToMany(mappedBy = "interests")
+    @JsonIgnore
+    private Collection<Event> events;
+
+    public Interest(String name, Collection<User> users, Collection<Event> events) {
         this.name = name;
         this.users = users;
+        this.events = events;
     }
 
     public Interest() {
@@ -46,16 +48,34 @@ public class Interest extends Model{
         this.name = name;
     }
 
+    public Collection<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(Collection<User> users) {
+        this.users = users;
+    }
+
+    public Collection<Event> getEvents() {
+        return events;
+    }
+
+    public void setEvents(Collection<Event> events) {
+        this.events = events;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Interest interest = (Interest) o;
-        return name.equals(interest.name);
+        return name.equals(interest.name) &&
+                Objects.equals(users, interest.users) &&
+                Objects.equals(events, interest.events);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name);
+        return Objects.hash(name, users, events);
     }
 }

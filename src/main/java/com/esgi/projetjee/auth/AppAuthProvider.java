@@ -41,7 +41,7 @@ public class AppAuthProvider extends DaoAuthenticationProvider {
             }
         }*/
 
-        return new UsernamePasswordAuthenticationToken(user, authentication.getCredentials(), user.getAuthorities()); // changer params pour username, password
+        return new UsernamePasswordAuthenticationToken(user, authentication.getCredentials(), user.getAuthorities());
     }
 
     @Override

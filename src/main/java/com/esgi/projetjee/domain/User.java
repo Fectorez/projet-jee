@@ -1,4 +1,4 @@
-package com.esgi.projetjee.model;
+package com.esgi.projetjee.domain;
 
 import com.esgi.projetjee.utils.BCryptManagerUtil;
 import lombok.Data;
@@ -37,6 +37,14 @@ public class User implements UserDetails {
     public User(@NotNull String username, @NotNull String password) {
         this.username = username;
         setPassword(password);
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     @Override
@@ -80,5 +88,21 @@ public class User implements UserDetails {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public Collection<Interest> getInterests() {
+        return interests;
+    }
+
+    public void setInterests(Collection<Interest> interests) {
+        this.interests = interests;
+    }
+
+    public Collection<Event> getEvents() {
+        return events;
+    }
+
+    public void setEvents(Collection<Event> events) {
+        this.events = events;
     }
 }

@@ -1,11 +1,12 @@
-package com.esgi.projetjee.model;
+package com.esgi.projetjee.domain;
 
 import jdk.nashorn.internal.objects.annotations.Property;
 import lombok.*;
 
 import javax.persistence.Entity;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
 import java.util.Objects;
 
@@ -30,6 +31,17 @@ public class Event extends Model {
 
     @ManyToOne
     private User user;
+
+    @ManyToMany
+    private Collection<Interest> interests;
+
+    public Event(String name, Date date, String location, User user, Collection<Interest> interests) {
+        this.name = name;
+        this.date = date;
+        this.location = location;
+        this.user = user;
+        this.interests = interests;
+    }
 
     public Event(String name, Date date, String location, User user) {
         this.name = name;
@@ -71,6 +83,22 @@ public class Event extends Model {
         this.location = location;
     }
 
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Collection<Interest> getInterests() {
+        return interests;
+    }
+
+    public void setInterests(Collection<Interest> interests) {
+        this.interests = interests;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -78,11 +106,13 @@ public class Event extends Model {
         Event event = (Event) o;
         return name.equals(event.name) &&
                 Objects.equals(date, event.date) &&
-                Objects.equals(location, event.location);
+                Objects.equals(location, event.location) &&
+                Objects.equals(user, event.user) &&
+                Objects.equals(interests, event.interests);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, date, location);
+        return Objects.hash(name, date, location, user, interests);
     }
 }

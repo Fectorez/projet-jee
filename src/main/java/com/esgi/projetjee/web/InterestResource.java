@@ -1,6 +1,6 @@
-package com.esgi.projetjee.controller;
+package com.esgi.projetjee.web;
 
-import com.esgi.projetjee.model.Interest;
+import com.esgi.projetjee.domain.Interest;
 import com.esgi.projetjee.service.InterestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,12 +10,12 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/interests")
-public class InterestController {
+public class InterestResource {
 
     private final InterestService interestService;
 
     @Autowired
-    public InterestController(InterestService interestService) {
+    public InterestResource(InterestService interestService) {
         this.interestService = interestService;
     }
 
@@ -32,7 +32,21 @@ public class InterestController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Interest createInterest(@RequestBody Interest interest) {
-        interestService.saveInterest(interest);
-        return interest;
+        return interestService.createOrUpdateInterest(interest);
+    }
+
+    @PutMapping
+    public Interest updateInterests(@RequestBody Interest interest) {
+        return interestService.createOrUpdateInterest(interest);
+    }
+
+    @PutMapping("/{id}")
+    public Interest updateInterest(@PathVariable Integer id) {
+        return interestService.updateInterestById(id);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteInterest(@PathVariable Integer id) {
+        interestService.deleteInterestById(id);
     }
 }

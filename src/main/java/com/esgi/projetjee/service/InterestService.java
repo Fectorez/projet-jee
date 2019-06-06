@@ -1,8 +1,8 @@
 package com.esgi.projetjee.service;
 
-import com.esgi.projetjee.dao.InterestRepository;
+import com.esgi.projetjee.repository.InterestRepository;
 import com.esgi.projetjee.exception.ResourceNotFoundException;
-import com.esgi.projetjee.model.Interest;
+import com.esgi.projetjee.domain.Interest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,13 +37,21 @@ public class InterestService {
     }
 
     @Transactional
-    public boolean saveInterest(Interest interest) {
-        interestRepository.save(interest);
-        return true;
+    public Interest createOrUpdateInterest(Interest interest) {
+        return interestRepository.save(interest);
     }
 
-    public boolean deleteEvent(Interest interest) {
-        interestRepository.delete(interest);
-        return true;
+    @Transactional
+    public Interest updateInterestById(Integer id) {
+        Optional<Interest> optional = interestRepository.findById(id);
+        if ( !optional.isPresent() ) {
+            throw new ResourceNotFoundException("No interest found with id " + id);
+        }
+        Interest interest = optional.get();
+        return interestRepository.save(interest);
+    }
+
+    public void deleteInterestById(Integer id) {
+        interestRepository.deleteById(id);
     }
 }
