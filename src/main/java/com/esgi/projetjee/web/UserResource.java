@@ -2,13 +2,16 @@ package com.esgi.projetjee.web;
 
 import com.esgi.projetjee.domain.Interest;
 import com.esgi.projetjee.domain.User;
+import com.esgi.projetjee.exception.PrendPlaceException;
 import com.esgi.projetjee.service.UserService;
+import com.esgi.projetjee.service.dto.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/users")
@@ -22,6 +25,22 @@ public class UserResource {
     }
 
     @GetMapping
+    public List<UserDto> findAll() {
+        return userService.findAll();
+    }
+
+    @GetMapping("/{id}")
+    public UserDto findOne(@PathVariable Integer id) throws PrendPlaceException {
+        Optional<UserDto> user = userService.findOne(id);
+        if ( user.isPresent() ) {
+            return user.get();
+        }
+        else {
+            throw new PrendPlaceException(HttpStatus.NOT_FOUND.value(), "Event not found");
+        }
+    }
+
+    /*@GetMapping
     public List<User> getUsers() {
         return userService.getUsers();
     }
@@ -55,5 +74,5 @@ public class UserResource {
     @DeleteMapping("/{id}")
     public void deleteUser(@PathVariable Integer id) {
         userService.deleteUserById(id);
-    }
+    }*/
 }

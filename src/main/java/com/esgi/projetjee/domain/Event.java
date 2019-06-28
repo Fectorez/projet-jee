@@ -1,6 +1,5 @@
 package com.esgi.projetjee.domain;
 
-import jdk.nashorn.internal.objects.annotations.Property;
 import lombok.*;
 
 import javax.persistence.Entity;
@@ -20,15 +19,9 @@ import java.util.Objects;
 @Entity
 public class Event extends Model {
 
-    @Property
     private String name;
-
-    @Property
     private Date date;
-
-    @Property
     private String location;
-
     @ManyToOne
     private User user;
 

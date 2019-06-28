@@ -1,10 +1,6 @@
 package com.esgi.projetjee.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jdk.nashorn.internal.objects.annotations.Property;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.Entity;
@@ -16,7 +12,6 @@ import java.util.Objects;
 @Entity
 public class Interest extends Model{
 
-    @Property
     private String name;
 
     @ManyToMany(mappedBy = "interests")
