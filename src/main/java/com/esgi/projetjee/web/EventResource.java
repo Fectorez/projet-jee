@@ -3,12 +3,16 @@ package com.esgi.projetjee.web;
 import com.esgi.projetjee.domain.Event;
 import com.esgi.projetjee.exception.PrendPlaceException;
 import com.esgi.projetjee.service.EventService;
+import com.esgi.projetjee.service.InterestService;
 import com.esgi.projetjee.service.dto.EventDto;
+import com.esgi.projetjee.service.dto.InterestDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,10 +21,12 @@ import java.util.Optional;
 public class EventResource {
 
     private final EventService eventService;
+    private final InterestService interestService;
 
     @Autowired
-    public EventResource(EventService eventService) {
+    public EventResource(EventService eventService, InterestService interestService) {
         this.eventService = eventService;
+        this.interestService = interestService;
     }
 
     @GetMapping
@@ -39,18 +45,28 @@ public class EventResource {
         }
     }
 
-    /*@PostMapping
+    @GetMapping("/{id}/interests")
+    public List<InterestDto> findInterests(@PathVariable Integer id) throws PrendPlaceException {
+        return eventService.findByIdInterests(id);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteById(@PathVariable Integer id) {
+        eventService.delete(id);
+    }
+
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Event createEvent(@RequestBody Event event) {
-        return eventService.createOrUpdateEvent(event);
+    public EventDto create(@RequestBody EventDto eventDto) {
+        return eventService.create(eventDto);
     }
 
-    @PutMapping
-    public Event updateEvents(@RequestBody Event event) {
-        return eventService.createOrUpdateEvent(event);
+    @PutMapping("/{id}/interests/{fk}")
+    public EventDto addInterest(@PathVariable Integer id, @PathVariable Integer fk) throws PrendPlaceException {
+        return eventService.addInterest(id, fk);
     }
 
-    @PutMapping("{id}/interests/{fk}")
+    /*@PutMapping("{id}/interests/{fk}")
     public Event updateByIdInterests(@PathVariable Integer id, @PathVariable Integer fk) {
         return eventService.updateEventByIdInterests(id, fk);
     }

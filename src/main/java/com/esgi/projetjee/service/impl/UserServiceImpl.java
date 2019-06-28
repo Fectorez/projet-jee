@@ -1,18 +1,29 @@
 package com.esgi.projetjee.service.impl;
 
+import com.esgi.projetjee.domain.Event;
+import com.esgi.projetjee.domain.Interest;
 import com.esgi.projetjee.domain.User;
+import com.esgi.projetjee.exception.PrendPlaceException;
 import com.esgi.projetjee.exception.ResourceNotFoundException;
+import com.esgi.projetjee.repository.EventRepository;
+import com.esgi.projetjee.repository.InterestRepository;
 import com.esgi.projetjee.repository.UserRepository;
 import com.esgi.projetjee.service.UserService;
+import com.esgi.projetjee.service.dto.EventDto;
+import com.esgi.projetjee.service.dto.InterestDto;
 import com.esgi.projetjee.service.dto.UserDto;
+import com.esgi.projetjee.service.mapper.EventMapper;
+import com.esgi.projetjee.service.mapper.InterestMapper;
 import com.esgi.projetjee.service.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -21,12 +32,20 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final InterestRepository interestRepository;
+    private final EventRepository eventRepository;
     private final UserMapper userMapper;
+    private final EventMapper eventMapper;
+    private final InterestMapper interestMapper;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper) {
+    public UserServiceImpl(UserRepository userRepository, InterestRepository interestRepository, EventRepository eventRepository, UserMapper userMapper, EventMapper eventMapper, InterestMapper interestMapper) {
         this.userRepository = userRepository;
+        this.interestRepository = interestRepository;
+        this.eventRepository = eventRepository;
         this.userMapper = userMapper;
+        this.eventMapper = eventMapper;
+        this.interestMapper = interestMapper;
     }
 
     @Override
@@ -51,6 +70,78 @@ public class UserServiceImpl implements UserService {
     @ExceptionHandler(ResourceNotFoundException.class)
     public Optional<UserDto> findOne(Integer id) {
         return userRepository.findById(id).map(userMapper::userToUserDto);
+    }
+
+    @Override
+    public List<EventDto> findByIdEvents(Integer id) throws PrendPlaceException {
+        Optional<User> user = userRepository.findById(id);
+        if ( !user.isPresent() ) {
+            throw new PrendPlaceException(HttpStatus.NOT_FOUND.value(), "Interest not found");
+        }
+        Collection<Event> events = user.get().getEvents();
+        return events.stream().map(eventMapper::eventToEventDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<InterestDto> findByIdInterests(Integer id) throws PrendPlaceException {
+        Optional<User> user = userRepository.findById(id);
+        if ( !user.isPresent() ) {
+            throw new PrendPlaceException(HttpStatus.NOT_FOUND.value(), "Event not found");
+        }
+        Collection<Interest> interests = user.get().getInterests();
+        return interests.stream().map(interestMapper::interestToInterestDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public void delete(Integer id) {
+        userRepository.deleteById(id);
+    }
+
+    @Override
+    public UserDto create(UserDto userDto) {
+        User event = userMapper.userDtoToUser(userDto);
+        event = userRepository.save(event);
+        return userMapper.userToUserDto(event);
+    }
+
+    @Override
+    public UserDto addInterest(Integer id, Integer fk) throws PrendPlaceException {
+        Optional<User> optionalUser = userRepository.findById(id);
+        if ( !optionalUser.isPresent() ) {
+            throw new PrendPlaceException(HttpStatus.NOT_FOUND.value(), "Event not found");
+        }
+        User user = optionalUser.get();
+
+        Optional<Interest> optionalInterest = interestRepository.findById(fk);
+        if ( !optionalInterest.isPresent() ) {
+            throw new PrendPlaceException(HttpStatus.NOT_FOUND.value(), "Interest not found");
+        }
+        Interest interest = optionalInterest.get();
+
+        Collection<Interest> interests = user.getInterests();
+        interests.add(interest);
+        user = userRepository.save(user);
+        return userMapper.userToUserDto(user);
+    }
+
+    @Override
+    public UserDto addEvent(Integer id, Integer fk) throws PrendPlaceException {
+        Optional<User> optionalUser = userRepository.findById(id);
+        if ( !optionalUser.isPresent() ) {
+            throw new PrendPlaceException(HttpStatus.NOT_FOUND.value(), "Event not found");
+        }
+        User user = optionalUser.get();
+
+        Optional<Event> optionalEvent = eventRepository.findById(fk);
+        if ( !optionalEvent.isPresent() ) {
+            throw new PrendPlaceException(HttpStatus.NOT_FOUND.value(), "Interest not found");
+        }
+        Event event = optionalEvent.get();
+
+        Collection<Event> events = user.getEvents();
+        events.add(event);
+        user = userRepository.save(user);
+        return userMapper.userToUserDto(user);
     }
 
     /*@Transactional

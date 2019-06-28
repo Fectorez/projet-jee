@@ -2,7 +2,9 @@ package com.esgi.projetjee.web;
 
 import com.esgi.projetjee.exception.PrendPlaceException;
 import com.esgi.projetjee.service.InterestService;
+import com.esgi.projetjee.service.dto.EventDto;
 import com.esgi.projetjee.service.dto.InterestDto;
+import com.esgi.projetjee.service.dto.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -37,13 +39,33 @@ public class InterestResource {
         }
     }
 
-    /*@PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public Interest createInterest(@RequestBody Interest interest) {
-        return interestService.createOrUpdateInterest(interest);
+    @GetMapping("/{id}/events")
+    public List<EventDto> findByIdEvents(@PathVariable Integer id) throws PrendPlaceException {
+        return interestService.findByIdEvents(id);
     }
 
-    @PutMapping
+    @GetMapping("/{id}/users")
+    public List<UserDto> findByIdUsers(@PathVariable Integer id) throws PrendPlaceException {
+        return interestService.findByIdUsers(id);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteById(@PathVariable Integer id) {
+        interestService.delete(id);
+    }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public InterestDto create(@RequestBody InterestDto interestDto) {
+        return interestService.create(interestDto);
+    }
+
+    @PutMapping("/{id}/events/{fk}")
+    public InterestDto addEvent(@PathVariable Integer id, @PathVariable Integer fk) throws PrendPlaceException {
+        return interestService.addEvent(id, fk);
+    }
+
+    /*@PutMapping
     public Interest updateInterests(@RequestBody Interest interest) {
         return interestService.createOrUpdateInterest(interest);
     }
