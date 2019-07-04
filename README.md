@@ -21,3 +21,13 @@ Projet JEE - ESGI 2018-2019 4AL2
 - Créer user admin, sur la console MySQL : `INSERT INTO USER(username, password) VALUES('ADMIN', 'ADMIN');`
 - Pour s'authentifier, "POST /login", avec {"username":"ADMIN", "password":"ADMIN"} en body.
 - "GET /events" fonctionne
+
+# Domaines
+
+Pour l'exemple, la BDD est "prendsplace" en dev, et "prendsplaceprod" en prod.
+
+##Développement
+Exécuter `mvn -Pdev clean install` avant de runner le projet
+
+##Production
+Exécuter `mvn -Pprod clean install` avant de runner le projet
