@@ -9,8 +9,6 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.util.Assert;
 
 public class AppAuthProvider extends DaoAuthenticationProvider {
 
@@ -27,14 +25,13 @@ public class AppAuthProvider extends DaoAuthenticationProvider {
         UserDetails user = userDetailsService.loadUserByUsername(name);
 
         if ( user == null ) {
+            System.out.println("username false");
             throw new BadCredentialsException("Username/Password does not match for " + auth.getPrincipal());
         }
 
         else {
             boolean passwordMatches = BCryptManagerUtil.passwordencoder().matches(password, user.getPassword());
-            System.out.println("passwordMatches="+passwordMatches);
             if ( !passwordMatches ) {
-                System.out.println("passwordMatches=dfdfsdfdssdfsddsdf");
                 throw new BadCredentialsException("Username/Password does not match for " + "s");
             }
         }

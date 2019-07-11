@@ -83,7 +83,7 @@ public class User implements UserDetails {
     }
 
     public void setPassword(String password) {
-        this.password = BCryptManagerUtil.passwordencoder().encode("{noop}"+password);
+        this.password = BCryptManagerUtil.passwordencoder().encode(password);
     }
 
     public void setUsername(String username) {
