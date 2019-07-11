@@ -22,9 +22,6 @@ Projet JEE - ESGI 2018-2019 4AL2
 - Pour s'authentifier, "POST /login", avec {"username":"ADMIN", "password":"ADMIN"} en body.
 - "GET /events" fonctionne
 
-# Avant exécution
-mvn clean install
-
 # Domaines
 
 Pour l'exemple, la BDD est "prendsplace" en dev, et "prendsplaceprod" en prod.
