@@ -30,14 +30,14 @@ public class AppAuthProvider extends DaoAuthenticationProvider {
             throw new BadCredentialsException("Username/Password does not match for " + auth.getPrincipal());
         }
 
-        /*else {
+        else {
             boolean passwordMatches = BCryptManagerUtil.passwordencoder().matches(password, user.getPassword());
             System.out.println("passwordMatches="+passwordMatches);
             if ( !passwordMatches ) {
                 System.out.println("passwordMatches=dfdfsdfdssdfsddsdf");
                 throw new BadCredentialsException("Username/Password does not match for " + "s");
             }
-        }*/
+        }
 
         return new UsernamePasswordAuthenticationToken(user, authentication.getCredentials(), user.getAuthorities());
     }
