@@ -30,6 +30,8 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user")
     private Collection<Event> events;
 
+    @ManyToMany
+    private Collection<Event> partEvents;
 
     public User() {
     }
@@ -104,5 +106,13 @@ public class User implements UserDetails {
 
     public void setEvents(Collection<Event> events) {
         this.events = events;
+    }
+
+    public Collection<Event> getPartEvents() {
+        return partEvents;
+    }
+
+    public void setPartEvents(Collection<Event> partEvents) {
+        this.partEvents = partEvents;
     }
 }

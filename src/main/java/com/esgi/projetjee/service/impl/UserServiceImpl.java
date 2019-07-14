@@ -93,6 +93,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<EventDto> findByIdPartEvents(Integer id) throws PrendPlaceException {
+        Optional<User> user = userRepository.findById(id);
+        if ( !user.isPresent() ) {
+            throw new PrendPlaceException(HttpStatus.NOT_FOUND.value(), "Interest not found");
+        }
+        Collection<Event> partEvents = user.get().getPartEvents();
+        return partEvents.stream().map(eventMapper::eventToEventDto).collect(Collectors.toList());
+    }
+
+    @Override
     public void delete(Integer id) {
         userRepository.deleteById(id);
     }
@@ -108,7 +118,7 @@ public class UserServiceImpl implements UserService {
     public UserDto addInterest(Integer id, Integer fk) throws PrendPlaceException {
         Optional<User> optionalUser = userRepository.findById(id);
         if ( !optionalUser.isPresent() ) {
-            throw new PrendPlaceException(HttpStatus.NOT_FOUND.value(), "Event not found");
+            throw new PrendPlaceException(HttpStatus.NOT_FOUND.value(), "User not found");
         }
         User user = optionalUser.get();
 
@@ -128,18 +138,38 @@ public class UserServiceImpl implements UserService {
     public UserDto addEvent(Integer id, Integer fk) throws PrendPlaceException {
         Optional<User> optionalUser = userRepository.findById(id);
         if ( !optionalUser.isPresent() ) {
-            throw new PrendPlaceException(HttpStatus.NOT_FOUND.value(), "Event not found");
+            throw new PrendPlaceException(HttpStatus.NOT_FOUND.value(), "User not found");
         }
         User user = optionalUser.get();
 
         Optional<Event> optionalEvent = eventRepository.findById(fk);
         if ( !optionalEvent.isPresent() ) {
-            throw new PrendPlaceException(HttpStatus.NOT_FOUND.value(), "Interest not found");
+            throw new PrendPlaceException(HttpStatus.NOT_FOUND.value(), "Event not found");
         }
         Event event = optionalEvent.get();
 
         Collection<Event> events = user.getEvents();
         events.add(event);
+        user = userRepository.save(user);
+        return userMapper.userToUserDto(user);
+    }
+
+    @Override
+    public UserDto addPartEvent(Integer id, Integer fk) throws PrendPlaceException {
+        Optional<User> optionalUser = userRepository.findById(id);
+        if ( !optionalUser.isPresent() ) {
+            throw new PrendPlaceException(HttpStatus.NOT_FOUND.value(), "User not found");
+        }
+        User user = optionalUser.get();
+
+        Optional<Event> optionalEvent = eventRepository.findById(fk);
+        if ( !optionalEvent.isPresent() ) {
+            throw new PrendPlaceException(HttpStatus.NOT_FOUND.value(), "Event not found");
+        }
+        Event partEvent = optionalEvent.get();
+
+        Collection<Event> partEvents = user.getPartEvents();
+        partEvents.add(partEvent);
         user = userRepository.save(user);
         return userMapper.userToUserDto(user);
     }

@@ -6,6 +6,7 @@ import com.esgi.projetjee.service.EventService;
 import com.esgi.projetjee.service.InterestService;
 import com.esgi.projetjee.service.dto.EventDto;
 import com.esgi.projetjee.service.dto.InterestDto;
+import com.esgi.projetjee.service.dto.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -50,6 +51,11 @@ public class EventResource {
         return eventService.findByIdInterests(id);
     }
 
+    @GetMapping("/{id}/participants")
+    public List<UserDto> findParticipants(@PathVariable Integer id) throws PrendPlaceException {
+        return eventService.findByIdParticipants(id);
+    }
+
     @DeleteMapping("/{id}")
     public void deleteById(@PathVariable Integer id) {
         eventService.delete(id);
@@ -64,6 +70,11 @@ public class EventResource {
     @PutMapping("/{id}/interests/{fk}")
     public EventDto addInterest(@PathVariable Integer id, @PathVariable Integer fk) throws PrendPlaceException {
         return eventService.addInterest(id, fk);
+    }
+
+    @PutMapping("/{id}/participants/{fk}")
+    public EventDto addParticipant(@PathVariable Integer id, @PathVariable Integer fk) throws PrendPlaceException {
+        return eventService.addParticipant(id, fk);
     }
 
     /*@PutMapping("{id}/interests/{fk}")

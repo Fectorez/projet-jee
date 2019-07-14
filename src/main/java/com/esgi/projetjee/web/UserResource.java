@@ -52,6 +52,11 @@ public class UserResource {
         return userService.findByIdEvents(id);
     }
 
+    @GetMapping("/{id}/partEvents")
+    public List<EventDto> findByIdPartEvents(@PathVariable Integer id) throws PrendPlaceException {
+        return userService.findByIdPartEvents(id);
+    }
+
     @DeleteMapping("/{id}")
     public void deleteById(@PathVariable Integer id) {
         userService.delete(id);
@@ -71,6 +76,11 @@ public class UserResource {
     @PutMapping("/{id}/events/{fk}")
     public UserDto addEvent(@PathVariable Integer id, @PathVariable Integer fk) throws PrendPlaceException {
         return userService.addEvent(id, fk);
+    }
+
+    @PutMapping("/{id}/partEvents/{fk}")
+    public UserDto addPartEvent(@PathVariable Integer id, @PathVariable Integer fk) throws PrendPlaceException {
+        return userService.addPartEvent(id, fk);
     }
 /*
     @PutMapping

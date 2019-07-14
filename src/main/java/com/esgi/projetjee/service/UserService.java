@@ -18,8 +18,10 @@ public interface UserService extends UserDetailsService {
     Optional<UserDto> findOne(Integer id);
     List<EventDto> findByIdEvents(Integer id) throws PrendPlaceException;
     List<InterestDto> findByIdInterests(Integer id) throws PrendPlaceException;
+    List<EventDto> findByIdPartEvents(Integer id) throws PrendPlaceException;
     void delete(Integer id);
     UserDto create(UserDto userDto);
     UserDto addInterest(Integer id, Integer fk) throws PrendPlaceException;
     UserDto addEvent(Integer id, Integer fk) throws PrendPlaceException;
+    UserDto addPartEvent(Integer id, Integer fk) throws PrendPlaceException;
 }

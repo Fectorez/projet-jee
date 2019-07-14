@@ -1,5 +1,6 @@
 package com.esgi.projetjee.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.Entity;
@@ -28,12 +29,25 @@ public class Event extends Model {
     @ManyToMany
     private Collection<Interest> interests;
 
-    public Event(String name, Date date, String location, User user, Collection<Interest> interests) {
+    public Collection<User> getParticipants() {
+        return participants;
+    }
+
+    public void setParticipants(Collection<User> participants) {
+        this.participants = participants;
+    }
+
+    @ManyToMany(mappedBy = "partEvents")
+    @JsonIgnore
+    private Collection<User> participants;
+
+    public Event(String name, Date date, String location, User user, Collection<Interest> interests, Collection<User> participants) {
         this.name = name;
         this.date = date;
         this.location = location;
         this.user = user;
         this.interests = interests;
+        this.participants = participants;
     }
 
     public Event(String name, Date date, String location, User user) {
