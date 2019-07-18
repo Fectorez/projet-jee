@@ -92,7 +92,7 @@ resource "aws_elb" "aws-loadbalancer" {
 
 
 resource "aws_instance" "aws-webserv" {
-    ami = "ami-03bca18cb3dc173c9"
+    ami = "ami-0c30afcb7ab02233d"
     instance_type = "t2.micro"
     key_name = "${aws_key_pair.aws-webserv-keypair.key_name}"
     security_groups = ["${aws_security_group.aws-secgrp-allow-ssh.name}","${aws_security_group.aws-secgrp-allow-8085.name}"]
