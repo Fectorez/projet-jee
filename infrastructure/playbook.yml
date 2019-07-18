@@ -34,6 +34,6 @@
     
     - name: run
       become: yes
-      shell: java -jar /home/projet-jee-0.0.1-SNAPSHOT.jar
-      #shell: nohup java -jar /home/projet-jee-0.0.1-SNAPSHOT.jar &
+      #shell: java -jar /home/projet-jee-0.0.1-SNAPSHOT.jar
+      shell: nohup java -jar /home/projet-jee-0.0.1-SNAPSHOT.jar &
 
