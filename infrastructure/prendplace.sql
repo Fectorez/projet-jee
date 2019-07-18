@@ -19,7 +19,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de données :  `heretoclean`
+-- Base de données :  `prendplace`
 --
 
 -- --------------------------------------------------------
@@ -27,6 +27,10 @@ SET time_zone = "+00:00";
 --
 -- Structure de la table `event`
 --
+
+CREATE DATABASE PrendPlace;
+
+USE PrendPlace;
 
 DROP TABLE IF EXISTS `event`;
 CREATE TABLE IF NOT EXISTS `event` (
