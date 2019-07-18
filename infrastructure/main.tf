@@ -45,12 +45,12 @@ resource "aws_security_group" "aws-secgrp-mysql-allow-querry" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 }
-resource "aws_security_group" "aws-secgrp-allow-8085" {
-  name = "allow-8085"
+resource "aws_security_group" "aws-secgrp-allow-8080" {
+  name = "allow-8080"
 
   ingress {
-    from_port = 8085
-    to_port = 8085
+    from_port = 8080
+    to_port = 8080
     protocol = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
@@ -70,7 +70,7 @@ resource "aws_elb" "aws-loadbalancer" {
     availability_zones = ["${aws_instance.aws-webserv.*.availability_zone}"]
 
     listener{
-        instance_port = 8085
+        instance_port = 8080
         instance_protocol = "http"
         lb_port=80
         lb_protocol = "http"
