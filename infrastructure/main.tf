@@ -1,10 +1,10 @@
 provider "aws" {
-  region = "eu-west-3"
+  region = "eu-west-2"
 }
 
 resource "aws_key_pair" "aws-webserv-keypair"{
     key_name = "aws-webserv"
-    public_key ="ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDi8GtJQwaVV1qECgECWY8U0Ctu6rHzt7eJFl6cNGsNFBswRySFOQTilMNsLP2ydWw3I/VCBbGOjGRVu+3bzdAa1ooKkZuNEjZVG23JZYcwL5+eoHU3ebgSzFeNetGVSyRurWJpcTBXsYXP3FttyvcpZ4W2nPfeqLnA9A79blPdqfJOBuDEALIoUU2pb1g9uPfmhknTicYzBHnCww/7moysMYoVtw/JsnHDcuALVyy6RzzrmE9nRgeaxKMwPJYqltaBvMNxwIXdwZw1MEqJvNJ8R8rtA76VDuJONSZGTH/RLRTLPuJdyFla0taSsez/4OWzh31HnaKb4kR2SzReNRfH ubu@ubuntu"
+    public_key = "${file("/root/.aws/aws-web-serv.pub")}"
 }
 
 
@@ -12,9 +12,10 @@ resource "aws_security_group" "aws-secgrp-allow-ssh" {
   name = "allow-ssh"
   
   ingress{
-      from_port =22
+      from_port =22 
+
       to_port = 22
-      protocol ="tcp"
+      protocol ="tcp" 
       cidr_blocks =["0.0.0.0/0"]
 
   }
@@ -28,11 +29,28 @@ resource "aws_security_group" "aws-secgrp-allow-ssh" {
 }
 
 resource "aws_security_group" "aws-secgrp-mysql-allow-querry" {
-  name = "mydb1"
+  name = "allo-mysql"
 
   ingress {
-    from_port = 3036
-    to_port = 5432
+    from_port = 3306
+    to_port = 3306
+    protocol = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port = 0
+    to_port = 0
+    protocol = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+resource "aws_security_group" "aws-secgrp-allow-8080" {
+  name = "allow-8080"
+
+  ingress {
+    from_port = 8080
+    to_port = 8080
     protocol = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
@@ -53,17 +71,19 @@ resource "aws_elb" "aws-loadbalancer" {
 
     listener{
         instance_port = 8080
-        instance_protocol = "tcp"
+        instance_protocol = "http"
         lb_port=80
-        lb_protocol = "tcp"
+        lb_protocol = "http"
     }
 
       health_check {
         healthy_threshold   = 2
-        unhealthy_threshold = 2
-        timeout             = 3
-        target              = "TCP:8080"
-        interval            = 30
+        unhealthy_threshold = 10
+        timeout             = 18
+        target              = "HTTP:8080/health"
+        interval            = 20
+        
+
     }
 
     instances = ["${aws_instance.aws-webserv.*.id}"]
@@ -72,11 +92,11 @@ resource "aws_elb" "aws-loadbalancer" {
 
 
 resource "aws_instance" "aws-webserv" {
-    ami = "ami-03bca18cb3dc173c9"
+    ami = "ami-0c30afcb7ab02233d"
     instance_type = "t2.micro"
     key_name = "${aws_key_pair.aws-webserv-keypair.key_name}"
-    security_groups = ["${aws_security_group.aws-secgrp-allow-ssh.name}"]
-    count = 3
+    security_groups = ["${aws_security_group.aws-secgrp-allow-ssh.name}","${aws_security_group.aws-secgrp-allow-8080.name}"]
+    count = 2
 
 }
 
@@ -87,29 +107,41 @@ resource "aws_db_instance" "aws-rds-mysql-instance" {
   engine               = "mysql"
   engine_version       = "5.7"
   instance_class       = "db.t2.micro"
-  name                 = "mydb"
+  name                 = "prendplace"
   username             = "root"
-  password             = "lemdpderoot"
+  password             = "${file("/home/dbpwd")}"
   parameter_group_name = "default.mysql5.7"
-  port    =  3306
-  skip_final_snapshot = true
+  port                 =  3306
+  skip_final_snapshot  = true
+  publicly_accessible  = true
+  vpc_security_group_ids = ["${aws_security_group.aws-secgrp-allow-ssh.id}","${aws_security_group.aws-secgrp-mysql-allow-querry.id}"]
 
+    provisioner "local-exec" {
+    command = "mysql --user=${aws_db_instance.aws-rds-mysql-instance.username} --password=${aws_db_instance.aws-rds-mysql-instance.password} --host=${aws_db_instance.aws-rds-mysql-instance.address} prendplace < prendplace.sql"
+  }
 }
 
-resource "aws_elasticache_cluster" "aws-redis" {
-  cluster_id           = "cluster-example"
-  engine               = "redis"
-  node_type            = "cache.t2.micro"
-  num_cache_nodes      = 1
-  parameter_group_name = "default.redis3.2"
-  engine_version       = "3.2.10"
-  port                 = 6379
-}
+
 
 output "output-mysql-address" {
   value = "${aws_db_instance.aws-rds-mysql-instance.address}"
 }
-output "output-redis-address" {
-  value = "${aws_elasticache_cluster.aws-redis.cache_nodes.0.address}"
-  
+
+data "aws_route53_zone" "cambar" {
+  name = "cambar.re."
 }
+
+resource "aws_route53_record" "prendplace" {
+  zone_id ="${data.aws_route53_zone.cambar.id}"
+  name = "prendplace"
+  type = "A"
+
+  alias{
+    name = "${aws_elb.aws-loadbalancer.dns_name}"
+    zone_id = "${aws_elb.aws-loadbalancer.zone_id}"
+    evaluate_target_health = true
+  }
+}
+
+
+
