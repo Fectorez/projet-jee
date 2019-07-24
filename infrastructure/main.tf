@@ -135,7 +135,7 @@ data "aws_route53_zone" "cambar" {
 
 resource "aws_route53_record" "heretoclean" {
   zone_id ="${data.aws_route53_zone.cambar.id}"
-  name = "hertoclean"
+  name = "heretoclean"
   type = "A"
 
   alias{
