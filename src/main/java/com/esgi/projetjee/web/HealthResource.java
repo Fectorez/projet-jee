@@ -22,7 +22,7 @@ public class HealthResource {
     }
 
     @GetMapping
-    public String findAll() {
+    public String health() {
         return "ok";
     }
 }

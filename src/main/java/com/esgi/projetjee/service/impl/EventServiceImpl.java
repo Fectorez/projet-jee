@@ -69,6 +69,8 @@ public class EventServiceImpl implements EventService {
     public EventDto create(EventDto eventDto) {
         Event event = eventMapper.eventDtoToEvent(eventDto);
         event = eventRepository.save(event);
+        System.out.println("event="+event);
+        System.out.println("eventMapper.eventToEventDto(event)="+eventMapper.eventToEventDto(event));
         return eventMapper.eventToEventDto(event);
     }
 

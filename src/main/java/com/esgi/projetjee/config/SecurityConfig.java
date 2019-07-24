@@ -65,7 +65,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/login").permitAll()
                 .antMatchers("/logout").permitAll()
                 .antMatchers("/users").permitAll()
-                .antMatchers("/events").authenticated()
+                .antMatchers("/events").permitAll()
                 .anyRequest().permitAll();
     }
     private class AuthentificationLoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {

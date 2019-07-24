@@ -86,19 +86,4 @@ public class EventResource {
     public JSONObject findOnWeb() throws IOException {
         return phqApi.findEvents();
     }
-
-    /*@PutMapping("{id}/interests/{fk}")
-    public Event updateByIdInterests(@PathVariable Integer id, @PathVariable Integer fk) {
-        return eventService.updateEventByIdInterests(id, fk);
-    }
-
-    @PutMapping("/{id}")
-    public Event updateEvent(@PathVariable Integer id) {
-        return eventService.updateEventById(id);
-    }
-
-    @DeleteMapping("/{id}")
-    public void deleteEvent(@PathVariable Integer id) {
-        eventService.deleteEventById(id);
-    }*/
 }

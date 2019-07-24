@@ -1,7 +1,5 @@
 package com.esgi.projetjee.web;
 
-import com.esgi.projetjee.domain.Interest;
-import com.esgi.projetjee.domain.User;
 import com.esgi.projetjee.exception.PrendPlaceException;
 import com.esgi.projetjee.service.UserService;
 import com.esgi.projetjee.service.dto.EventDto;
@@ -9,7 +7,6 @@ import com.esgi.projetjee.service.dto.InterestDto;
 import com.esgi.projetjee.service.dto.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -82,19 +79,4 @@ public class UserResource {
     public UserDto addPartEvent(@PathVariable Integer id, @PathVariable Integer fk) throws PrendPlaceException {
         return userService.addPartEvent(id, fk);
     }
-/*
-    @PutMapping
-    public User updateUsers(@RequestBody User user) {
-        return userService.createOrUpdateUser(user);
-    }
-
-    @PutMapping("{id}/interests/{fk}")
-    public User updateByIdInterests(@PathVariable Integer id, @PathVariable Integer fk) {
-        return userService.updateUserByIdInterests(id, fk);
-    }
-
-    @PutMapping("/{id}")
-    public User updateUser(@PathVariable Integer id) {
-        return userService.updateUserById(id);
-    }*/
 }
