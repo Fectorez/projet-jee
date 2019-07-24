@@ -1,5 +1,6 @@
 package com.esgi.projetjee.web;
 
+import com.esgi.projetjee.api.PhqApi;
 import com.esgi.projetjee.domain.Event;
 import com.esgi.projetjee.exception.PrendPlaceException;
 import com.esgi.projetjee.service.EventService;
@@ -7,12 +8,14 @@ import com.esgi.projetjee.service.InterestService;
 import com.esgi.projetjee.service.dto.EventDto;
 import com.esgi.projetjee.service.dto.InterestDto;
 import com.esgi.projetjee.service.dto.UserDto;
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -23,6 +26,7 @@ public class EventResource {
 
     private final EventService eventService;
     private final InterestService interestService;
+    private final PhqApi phqApi = new PhqApi();
 
     @Autowired
     public EventResource(EventService eventService, InterestService interestService) {
@@ -77,18 +81,9 @@ public class EventResource {
         return eventService.addParticipant(id, fk);
     }
 
-    /*@PutMapping("{id}/interests/{fk}")
-    public Event updateByIdInterests(@PathVariable Integer id, @PathVariable Integer fk) {
-        return eventService.updateEventByIdInterests(id, fk);
-    }
 
-    @PutMapping("/{id}")
-    public Event updateEvent(@PathVariable Integer id) {
-        return eventService.updateEventById(id);
+    @GetMapping("/find-on-web")
+    public JSONObject findOnWeb() throws IOException {
+        return phqApi.findEvents();
     }
-
-    @DeleteMapping("/{id}")
-    public void deleteEvent(@PathVariable Integer id) {
-        eventService.deleteEventById(id);
-    }*/
 }

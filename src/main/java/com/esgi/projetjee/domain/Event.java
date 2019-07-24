@@ -41,6 +41,16 @@ public class Event extends Model {
     @JsonIgnore
     private Collection<User> participants;
 
+    public Event(Integer id, String name, Date date, String location, User user, Collection<Interest> interests, Collection<User> participants) {
+        setId(id);
+        this.name = name;
+        this.date = date;
+        this.location = location;
+        this.user = user;
+        this.interests = interests;
+        this.participants = participants;
+    }
+
     public Event(String name, Date date, String location, User user, Collection<Interest> interests, Collection<User> participants) {
         this.name = name;
         this.date = date;
@@ -121,5 +131,17 @@ public class Event extends Model {
     @Override
     public int hashCode() {
         return Objects.hash(name, date, location, user, interests);
+    }
+
+    @Override
+    public String toString() {
+        return "Event{" +
+                "name='" + name + '\'' +
+                ", date=" + date +
+                ", location='" + location + '\'' +
+                ", user=" + user +
+                ", interests=" + interests +
+                ", participants=" + participants +
+                '}';
     }
 }

@@ -64,19 +64,4 @@ public class InterestResource {
     public InterestDto addEvent(@PathVariable Integer id, @PathVariable Integer fk) throws PrendPlaceException {
         return interestService.addEvent(id, fk);
     }
-
-    /*@PutMapping
-    public Interest updateInterests(@RequestBody Interest interest) {
-        return interestService.createOrUpdateInterest(interest);
-    }
-
-    @PutMapping("/{id}")
-    public Interest updateInterest(@PathVariable Integer id) {
-        return interestService.updateInterestById(id);
-    }
-
-    @DeleteMapping("/{id}")
-    public void deleteInterest(@PathVariable Integer id) {
-        interestService.deleteInterestById(id);
-    }*/
 }

@@ -10,7 +10,7 @@ public interface EventMapper {
     @Mappings({
             @Mapping(source = "id", target = "id"),
             @Mapping(source = "name", target = "name"),
-            @Mapping(source = "date", target = "date"),
+            @Mapping(source = "date", target = "date", dateFormat = "yyyy-mm-dd"),
             @Mapping(source = "location", target = "location"),
             @Mapping(source = "user.id", target = "userId"),
     })
