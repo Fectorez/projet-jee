@@ -23,6 +23,6 @@ public class HealthResource {
 
     @GetMapping
     public String health() {
-        return "health ok";
+        return "health ok v2";
     }
 }
