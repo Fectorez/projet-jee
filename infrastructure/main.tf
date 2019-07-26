@@ -1,3 +1,5 @@
+
+
 provider "aws" {
   region = "eu-west-2"
 }
@@ -131,9 +133,9 @@ data "aws_route53_zone" "cambar" {
   name = "cambar.re."
 }
 
-resource "aws_route53_record" "prendplace" {
+resource "aws_route53_record" "heretoclean" {
   zone_id ="${data.aws_route53_zone.cambar.id}"
-  name = "prendplace"
+  name = "heretoclean"
   type = "A"
 
   alias{
